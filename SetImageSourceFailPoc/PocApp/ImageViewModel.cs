@@ -1,10 +1,5 @@
-﻿using Microsoft.UI.Xaml.Media.Imaging;
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Streams;
 
 namespace PocApp;
 
@@ -15,8 +10,8 @@ public class ImageViewModel : INotifyPropertyChanged
     private State state = State.None;
     public State State { get => state; private set => SetState(value); }
 
-    private BitmapImage mainImageSource = null;
-    public BitmapImage MainImageSource
+    private string mainImageSource = null;
+    public string MainImageSource
     {
         get => mainImageSource;
         set
@@ -44,7 +39,7 @@ public class ImageViewModel : INotifyPropertyChanged
         }
     }
 
-    private async void SetState(State value)
+    private void SetState(State value)
     {
         if (value == state)
             return;
@@ -54,24 +49,20 @@ public class ImageViewModel : INotifyPropertyChanged
         switch (State)
         {
             case State.Intro:
-                MainImageSource = await GetImageSourceFromAssets("quiz_intro_main.png");
+                {
+                    Uri uri = new("ms-appx:///Assets/quiz_intro_main.png");
+                    MainImageSource = uri.AbsolutePath;
+                }
                 break;
             case State.Conditions:
-                MainImageSource = await GetImageSourceFromAssets("quiz_conditions_main.png");
+                {
+                    Uri uri = new("ms-appx:///Assets/quiz_conditions_main.png");
+                    MainImageSource = uri.AbsolutePath;
+                }
                 break;
         }
 
         state = value;
-    }
-
-    private static async Task<BitmapImage> GetImageSourceFromAssets(string path)
-    {
-        StorageFile file = await StorageFile.GetFileFromPathAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Assets\\{path}"));
-        using IRandomAccessStream fileStream = await file.OpenReadAsync();
-        BitmapImage bitmapImage = new();
-        await bitmapImage.SetSourceAsync(fileStream);
-
-        return bitmapImage;
     }
 
     private void OnPropertyChanged(string propertyName)
