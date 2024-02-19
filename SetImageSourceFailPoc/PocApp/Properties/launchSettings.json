@@ -1,7 +1,8 @@
 {
   "profiles": {
     "PocApp (Unpackaged)": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": true
     }
   }
 }
