@@ -5,13 +5,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PocApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.DataContext>
-        <local:ImageViewModel />
-    </Page.DataContext>
+    
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="PointerPressed">
+            <core:InvokeCommandAction Command="{x:Bind ViewModel.SwapStateCommand, Mode=OneWay}" />
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+    
     <Canvas Width="1920" Height="1080">
-        <Image Source="{Binding MainImageSource}" />
+        <Image Source="{x:Bind ViewModel.MainImageSource, Mode=OneWay}" />
     </Canvas>
 </Page>
